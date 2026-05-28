@@ -1,34 +1,37 @@
+import attorney1 from "../assets/attorney1.jpg";
+import attorney2 from "../assets/attorney2.jpg";
+import attorney3 from "../assets/attorney3.jpg";
+
 const ATTORNEYS = [
   {
-    emoji: "👨‍⚖️",
+    image: attorney1,
     role: "Senior Partner",
     name: "Rajesh Sharma",
     spec: "Corporate Law · M&A · 20 Years",
   },
   {
-    emoji: "👩‍⚖️",
+    image: attorney2,
     role: "Managing Partner",
     name: "Priya Verma",
     spec: "IP Law · Compliance · 16 Years",
   },
   {
-    emoji: "👨‍⚖️",
+    image: attorney3,
     role: "Associate Partner",
     name: "Arjun Kapoor",
     spec: "Litigation · Employment Law · 12 Years",
   },
 ];
- 
+
 export default function Attorneys() {
   const handleClick = (e) => {
     e.preventDefault();
     document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
   };
- 
+
   return (
     <section id="attorneys">
       <div className="section-inner">
-        {/* Header */}
         <div className="attorneys-header">
           <div>
             <div className="section-label reveal">Our Team</div>
@@ -44,21 +47,28 @@ export default function Attorneys() {
             style={{ whiteSpace: "nowrap" }}
             onClick={handleClick}
           >
-            View All Attorneys →
+            View All Attorneys
           </a>
         </div>
- 
-        {/* Cards */}
+
         <div className="attorneys-grid">
-          {ATTORNEYS.map(({ emoji, role, name, spec }, i) => (
+          {ATTORNEYS.map(({ image, role, name, spec }, i) => (
             <div
               className={`attorney-card reveal${i > 0 ? ` reveal-delay-${i}` : ""}`}
               key={name}
             >
               <div className="attorney-img">
-                <div className="attorney-placeholder">
-                  <div className="attorney-avatar">{emoji}</div>
-                </div>
+                <img
+                  src={image}
+                  alt={name}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "top",
+                    display: "block",
+                  }}
+                />
                 <div className="attorney-img-overlay" />
                 <div className="attorney-hover-line" />
                 <div className="attorney-info">

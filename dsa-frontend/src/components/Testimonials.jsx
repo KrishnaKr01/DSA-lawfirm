@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
- 
+
 const TESTIMONIALS = [
   {
     initials: "AK",
@@ -26,48 +26,62 @@ const TESTIMONIALS = [
     role: "MD, Global Holdings Group",
   },
 ];
- 
-const TOTAL_SLIDES = 2; // 2 slides of 2 cards each
- 
+
 export default function Testimonials() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const trackRef = useRef(null);
   const autoRef = useRef(null);
- 
+  const sliderRef = useRef(null);
+
+  const isMobile = () => window.innerWidth <= 768;
+
+  // On mobile: 1 card per slide (4 slides), on desktop: 2 cards per slide (2 slides)
+  const totalSlides = () => (isMobile() ? TESTIMONIALS.length : 2);
+
   const updateSlider = (slide) => {
-    if (!trackRef.current) return;
-    const cardWidth =
-      trackRef.current.children[0]?.offsetWidth + 32 || 0;
-    trackRef.current.style.transform = `translateX(-${slide * (cardWidth * 2 + 32)}px)`;
+    if (!trackRef.current || !sliderRef.current) return;
+    const sliderWidth = sliderRef.current.offsetWidth;
+    if (isMobile()) {
+      trackRef.current.style.transform = `translateX(-${slide * (sliderWidth + 32)}px)`;
+    } else {
+      trackRef.current.style.transform = `translateX(-${slide * (sliderWidth / 2 + 16) * 2}px)`;
+    }
   };
- 
+
   const goToSlide = (i) => {
     setCurrentSlide(i);
     updateSlider(i);
   };
- 
+
   const slide = (dir) => {
-    const next = (currentSlide + dir + TOTAL_SLIDES) % TOTAL_SLIDES;
-    goToSlide(next);
+    setCurrentSlide((prev) => {
+      const next = (prev + dir + totalSlides()) % totalSlides();
+      updateSlider(next);
+      return next;
+    });
   };
- 
-  // Auto-slide
+
   useEffect(() => {
     autoRef.current = setInterval(() => slide(1), 5000);
     return () => clearInterval(autoRef.current);
   }, [currentSlide]);
- 
-  // Recalculate on resize
+
   useEffect(() => {
-    const handleResize = () => updateSlider(currentSlide);
+    const handleResize = () => {
+      setCurrentSlide(0);
+      updateSlider(0);
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [currentSlide]);
- 
+  }, []);
+
+  const slides = isMobile()
+    ? TESTIMONIALS.length
+    : 2;
+
   return (
     <section id="testimonials">
       <div className="section-inner">
-        {/* Header */}
         <div className="testimonials-header">
           <div className="section-label reveal">Testimonials</div>
           <h2 className="section-title reveal reveal-delay-1">
@@ -75,13 +89,18 @@ export default function Testimonials() {
             <span className="italic">Say</span>
           </h2>
         </div>
- 
-        {/* Slider */}
-        <div className="testimonials-slider reveal reveal-delay-2">
-          <div className="testimonials-track" id="testimonialsTrack" ref={trackRef}>
+
+        <div className="testimonials-slider reveal reveal-delay-2" ref={sliderRef}>
+          <div className="testimonials-track" ref={trackRef}>
             {TESTIMONIALS.map(({ initials, text, name, role }) => (
               <div className="testimonial-card" key={name}>
-                <div className="testimonial-stars">★★★★★</div>
+                <div className="testimonial-stars">
+                  <span className="star">★</span>
+                  <span className="star">★</span>
+                  <span className="star">★</span>
+                  <span className="star">★</span>
+                  <span className="star">★</span>
+                </div>
                 <p className="testimonial-text">"{text}"</p>
                 <div className="testimonial-client">
                   <div className="client-avatar">{initials}</div>
@@ -94,14 +113,13 @@ export default function Testimonials() {
             ))}
           </div>
         </div>
- 
-        {/* Controls */}
+
         <div className="slider-controls">
           <button className="slider-btn" onClick={() => slide(-1)}>
-            ←
+            &#8592;
           </button>
           <div className="slider-dots">
-            {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
+            {Array.from({ length: slides }).map((_, i) => (
               <button
                 key={i}
                 className={`slider-dot${currentSlide === i ? " active" : ""}`}
@@ -110,7 +128,7 @@ export default function Testimonials() {
             ))}
           </div>
           <button className="slider-btn" onClick={() => slide(1)}>
-            →
+            &#8594;
           </button>
         </div>
       </div>

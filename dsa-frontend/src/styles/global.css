@@ -1445,3 +1445,13 @@ footer {
     backdrop-filter: blur(20px);
   }
 }
+.testimonials-slider {
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .testimonial-card {
+    min-width: 100% !important;
+    padding: 32px 24px;
+  }
+}
