@@ -1408,3 +1408,40 @@ footer {
   .hero-stats { flex-direction: column; align-items: center; }
   .stat-divider { display: none; }
 }
+/* ===== HAMBURGER (single clean definition) ===== */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 10000;
+  position: relative;
+}
+
+.nav-hamburger span {
+  width: 28px;
+  height: 1.5px;
+  background: var(--gold);
+  display: block;
+  transition: all 0.3s;
+}
+
+@media (max-width: 768px) {
+  .nav-hamburger {
+    display: flex !important;
+  }
+
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(4, 8, 16, 0.98);
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    z-index: 1001;
+    backdrop-filter: blur(20px);
+  }
+}

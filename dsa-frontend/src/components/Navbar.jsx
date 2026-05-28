@@ -58,23 +58,31 @@ export default function Navbar() {
       </ul>
  
       <div
-        className="nav-hamburger"
-        id="hamburger"
-        onClick={toggleMenu}
-        aria-label="Toggle menu"
-      >
-        <span
-          style={{
-            transform: menuOpen ? "rotate(45deg) translate(5px,5px)" : "",
-          }}
-        />
-        <span style={{ opacity: menuOpen ? 0 : 1 }} />
-        <span
-          style={{
-            transform: menuOpen ? "rotate(-45deg) translate(5px,-5px)" : "",
-          }}
-        />
-      </div>
+       className={`nav-hamburger ${menuOpen ? "open" : ""}`}
+       onClick={toggleMenu}
+  aria-label="Toggle menu"
+  style={{ zIndex: 10000, position: "relative" }}
+>
+  {menuOpen ? (
+    <svg
+      width="28" height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="var(--gold)"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  ) : (
+    <>
+      <span />
+      <span />
+      <span />
+    </>
+  )}
+</div>
     </nav>
   );
 }
